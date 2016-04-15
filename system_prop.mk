@@ -1,5 +1,5 @@
 #
-# System Properties for Moto X Pure
+# System Properties for Moto X Force
 #
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -73,7 +73,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.metadata_dynfps.disable=true \
     persist.demo.hdmirotationlock=false \
     dev.pm.dyn_samplingrate=1 \
-    ro.hwui.texture_cache_flushrate=0.4
+    ro.hwui.texture_cache_flushrate=0.4 \
+	persist.panel.inversemounted=1
 
 # USB
 PRODUCT_PROPERTY_OVERRIDES += \
