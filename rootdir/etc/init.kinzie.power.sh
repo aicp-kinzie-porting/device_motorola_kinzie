@@ -4,18 +4,18 @@
 # helper functions to allow Android init like script
 
 function write() {
-    echo -n $2 > $1
+echo -n $2 > $1
 }
 
 function copy() {
-    cat $1 > $2
+cat $1 > $2
 }
 
 function get-set-forall() {
-    for f in $1 ; do
-        cat $f
-        write $f $2
-    done
+for f in $1 ; do
+cat $f
+write $f $2
+done
 }
 
 ################################################################################
@@ -24,9 +24,11 @@ stop perfd
 
 # ensure at most one A57 is online when thermal hotplug is disabled
 write /sys/devices/system/cpu/cpu5/online 0
+write /sys/devices/system/cpu/cpu6/online 0
+write /sys/devices/system/cpu/cpu7/online 0
 
 # Limit A57 max freq from msm_perf module in case CPU 4 is offline
-write /sys/module/msm_performance/parameters/cpu_max_freq "4:960000 5:960000"
+write /sys/module/msm_performance/parameters/cpu_max_freq "4:960000 5:960000 6:960000 7:960000"
 
 # disable thermal bcl hotplug to switch governor
 write /sys/module/msm_thermal/core_control/enabled 0
@@ -47,6 +49,8 @@ write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
 write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
 write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
 write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
+write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
+write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
 
 # Disable L2 retention
 write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
@@ -57,12 +61,12 @@ write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
 restorecon -R /sys/devices/system/cpu # must restore after interactive
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
-write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 39000
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 90
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
-write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 768000
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
-write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 90
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 80000
 write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
@@ -75,12 +79,12 @@ write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
 restorecon -R /sys/devices/system/cpu # must restore after interactive
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
-write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 19000
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000"
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1248000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
-write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 85
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "85 1500000:90 1800000:70"
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
 write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
@@ -90,7 +94,7 @@ write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
 copy /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
 
 # input boost configuration
-write /sys/module/cpu_boost/parameters/input_boost_freq 0:1248000
+write /sys/module/cpu_boost/parameters/input_boost_freq 0:1344000
 write /sys/module/cpu_boost/parameters/input_boost_ms 40
 
 # I/O scheduler
@@ -140,13 +144,13 @@ get-set-forall /sys/devices/soc.0/qcom,bcl.*/mode enable
 write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
 # Configure foreground and background cpuset
-write /dev/cpuset/foreground/cpus 0-5
-write /dev/cpuset/foreground/boost/cpus 4-5
+write /dev/cpuset/foreground/cpus 0-7
+write /dev/cpuset/foreground/boost/cpus 4-7
 write /dev/cpuset/background/cpus 0
 write /dev/cpuset/system-background/cpus 0-3
 
 # Restore CPU 4 max freq from msm_performance
-write /sys/module/msm_performance/parameters/cpu_max_freq "4:4294967295 5:4294967295"
+write /sys/module/msm_performance/parameters/cpu_max_freq "4:4294967295 5:4294967295 6:4294967295 7:4294967295"
 
 # change GPU initial power level from 305MHz(level 4) to 180MHz(level 5) for power savings
 write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 5

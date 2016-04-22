@@ -102,6 +102,7 @@ on property:sys.usb.config=mtp
     write /sys/class/android_usb/android0/idProduct ${ro.usb.mtp}
     write /sys/class/android_usb/android0/functions mtp
     write /sys/class/android_usb/android0/enable 1
+
     setprop sys.usb.state ${sys.usb.config}
 
 on property:sys.usb.config=mtp,adb

@@ -1,4 +1,10 @@
 on charger
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 22B8
+    write /sys/class/android_usb/android0/idProduct 2EB7
+    write /sys/class/android_usb/android0/functions mass_storage
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+    write /sys/class/android_usb/android0/enable 1
     trigger early-fs
     trigger fs
     trigger post-fs
@@ -8,12 +14,12 @@ on charger
     trigger moto-charger
 
 on moto-charger
-    setprop ro.board.platform msm8992
+    setprop ro.board.platform msm8994
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "powersave"
     write /sys/module/msm_thermal/parameters/enabled Y
     write /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/governor "powersave"
-    write /sys/class/devfreq/qcom,cpubw.27/governor "powersave"
+    write /sys/class/devfreq/qcom,cpubw.32/governor "powersave"
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
     setprop sys.usb.config charging
     start charge_only_mode
