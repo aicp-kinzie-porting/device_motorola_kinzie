@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# This file includes all definitions that apply to ALL clark devices, and
-# are also specific to clark devices
+# This file includes all definitions that apply to ALL kinzie devices, and
+# are also specific to kinzie devices
 #
 # Everything in this directory will become public
 
@@ -29,7 +29,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/qcril.db:system/etc/motorola/qcril.db
 
-# Input device files for clark
+# Input device files for kinzie
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
 
