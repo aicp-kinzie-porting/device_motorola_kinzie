@@ -54,8 +54,9 @@ TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_KERNEL_ARCH := arm64
 TARGET_USES_UNCOMPRESSED_KERNEL := true
 TARGET_KERNEL_HAVE_EXFAT := true
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 earlyprintk=msm_hsl_uart,0xf991e000 utags.blkdev=/dev/block/bootdevice/by-name/utags utags.backup=/dev/block/bootdevice/by-name/utagsBackup
+BOARD_KERNEL_CMDLINE :=console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 earlyprintk=msm_hsl_uart,0xf991e000 utags.blkdev=/dev/block/bootdevice/by-name/utags utags.backup=/dev/block/bootdevice/by-name/utagsBackup boot_cpus=0-5
 BOARD_MKBOOTIMG_ARGS := --kernel_offset BOARD_KERNEL_OFFSET --ramdisk_offset BOARD_RAMDISK_OFFSET --tags_offset BOARD_KERNEL_TAGS_OFFSET
+BOARD_VENDOR := motorola-qcom
 
 TARGET_NO_RADIOIMAGE := true
 TARGET_BOARD_PLATFORM := msm8994
@@ -79,6 +80,8 @@ BOARD_HARDWARE_CLASS := \
 # Font
 EXTENDED_FONT_FOOTPRINT := true
 
+# Time service
+BOARD_USES_QC_TIME_SERVICES := true
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_COMPRESS_CAPTURE := true
@@ -114,6 +117,7 @@ BOARD_HAS_QCA_BT_ROME := true
 QCOM_BT_USE_BTNV := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
 BOARD_BLUETOOTH_BDROID_HCILP_INCLUDED := false
+BOARD_BLUEDROID_VENDOR_CONF := $(DEVICE_PATH)/bluetooth/libbt_vndcfg.txt
 
 # GPS
 TARGET_NO_RPC := true
@@ -122,6 +126,7 @@ TARGET_NO_RPC := true
 TARGET_RIL_VARIANT := caf
 
 # Graphics
+TARGET_USES_QCOM_BSP := true
 USE_OPENGL_RENDERER := true
 TARGET_USES_C2D_COMPOSITION := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
@@ -145,8 +150,8 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 42024960
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4294967296
 BOARD_CACHEIMAGE_PARTITION_SIZE := 805306368
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_FLASH_BLOCK_SIZE := 131072
-
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 25832587264
+BOARD_FLASH_BLOCK_SIZE := 262144
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
 
@@ -174,11 +179,15 @@ TARGET_INIT_VENDOR_LIB := libinit_kinzie
 TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_kinzie.cpp
 
 # TWRP definitions
-DEVICE_RESOLUTION := 1440x2560
+TW_THEME := portrait_hdpi
 TW_INCLUDE_L_CRYPTO := true
 TW_TARGET_USES_QCOM_BSP := true
 TW_NEW_ION_HEAP := true
 TW_INCLUDE_CRYPTO := true
-TW_SCREEN_BLANK_ON_BOOT := true
+TW_NO_SCREEN_BLANK := true
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TARGET_RECOVERY_PIXEL_FORMAT := RGBA_8888
+BOARD_SUPPRESS_SECURE_ERASE := true
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_RECOVERY_FSTAB = $(DEVICE_PATH)/rootdir/etc/fstab.qcom
