@@ -14,129 +14,70 @@
 # limitations under the License.
 #
 
-# This file includes all definitions that apply to ALL kinzie devices, and
-# are also specific to kinzie devices
-#
-# Everything in this directory will become public
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+$(call inherit-product-if-exists, vendor/motorola/kinzie/kinzie-vendor.mk)
 
-# System properties
-include $(LOCAL_PATH)/system_prop.mk
-
+# Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config \
-    $(LOCAL_PATH)/configs/msm_irqbalance.conf:system/etc/msm_irqbalance.conf
+    $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
+    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/audio/audio_platform_info_i2s.xml:system/etc/audio_platform_info_i2s.xml \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/audio/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/audio/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/qcril.db:system/etc/motorola/qcril.db
-
-# Input device files for kinzie
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/thermanager.xml:system/etc/thermanager.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml \
-    $(LOCAL_PATH)/configs/dsi_config.xml:system/etc/data/dsi_config.xml \
-    $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensors/sensorhub-blacklist.txt:system/etc/firmware/sensorhub-blacklist.txt
-
-PRODUCT_TAGS += dalvik.gc.type-precise
-
-# This device is 560dpi.  However the platform doesn't
-# currently contain all of the bitmaps at 560dpi density so
-# we do this little trick to fall back to the xxhdpi version
-# if the 560dpi doesn't exist.
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := 560dpi
-PRODUCT_AAPT_PREBUILT_DPI := xxxhdpi xxhdpi xhdpi hdpi
-
-PRODUCT_CHARACTERISTICS := default
-
-DEVICE_PACKAGE_OVERLAYS := \
-    $(LOCAL_PATH)/overlay
-
-# Generic
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
-    libqsap_sdk \
-    ebtables \
-    ethertypes \
-    libnl_2 \
-    libbson \
-    librmnetctl \
-    libxml2
-
-# Thermal
-PRODUCT_PACKAGES += \
-    thermanager
-
-# Sony timekeep
-PRODUCT_PACKAGES += \
-    timekeep \
-    TimeKeep
-
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-    LiveWallpapersPicker \
-    librs_jni
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-    fsck.exfat \
-    e2fsck \
-    make_ext4fs \
-    setup_fs
-
-# Power
-PRODUCT_PACKAGES += \
-    power.kinzie
-
-
-# NFC packages
-PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
-    nfc_nci.bcm2079x.default \
-    NfcNci \
-    Tag
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
-    $(LOCAL_PATH)/nfc/libnfc-brcm-20795a20.conf:system/etc/libnfc-brcm-20795a20.conf
+    audio_policy.msm8994 \
+    audio.a2dp.default \
+    audio.primary.msm8994 \
+    audio.r_submix.default \
+    audio.usb.default \
+    libaudio-resampler \
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
+    libqcomvoiceprocessingdescriptors \
+    libtinyalsa \
+    libtinycompress \
+    libtinyxml \
+    tinymix
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.kinzie \
+    camera.msm8994 \
     libcamera \
     libqomx_core \
     libmm-qcamera \
     libmmcamera_interface \
     libmmjpeg_interface \
     mm-qcamera-app \
+    libshim_camera \
     Snap
 
-# for off charging mode
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/com.motorola.cameraone.xml:system/etc/permissions/com.motorola.cameraone.xml
+
+# CMActions
 PRODUCT_PACKAGES += \
-    charger_res_images
+    CMActions \
+    libjni_CMActions
+
+# Display
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := 560dpi
+TARGET_BOOTANIMATION_HALF_RES := true
+TARGET_SCREEN_HEIGHT := 2560
+TARGET_SCREEN_WIDTH := 1440
 
 PRODUCT_PACKAGES += \
     pp_calib_data_mipi_mot_cmd_inx_QHD_0_570_v0.xml
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/twrp.fstab:recovery/root/etc/twrp.fstab
-
-PRODUCT_PACKAGES += \
-    fstab.qcom \
-    init.mmi.usb.rc \
-    init.qcom.rc \
-    init.qcom.power.rc \
-    init.kinzie.power.sh \
-    ueventd.qcom.rc
-
-# Display
 PRODUCT_PACKAGES += \
     hwcomposer.msm8994 \
     gralloc.msm8994 \
@@ -146,9 +87,50 @@ PRODUCT_PACKAGES += \
     libqdutils \
     libqdMetaData
 
+# Firmware extraction script
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/releasetools/extract_firmware.sh:install/bin/extract_firmware.sh
+
+# Gello
+PRODUCT_PACKAGES += \
+    Gello
+
+# GPS
+PRODUCT_PACKAGES += \
+    gps.msm8994
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf
+
+# Init
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.mmi.touch.sh \
+    init.mmi.usb.rc \
+    init.qcom.power.rc \
+    init.qcom.power.sh \
+    init.qcom.rc \
+    ueventd.qcom.rc
+
+PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
+    ro.product.model \
+    ro.product.name
+
+# IPA Manager
+PRODUCT_PACKAGES += \
+    ipacm \
+    IPACM_cfg.xml
+
+# Keylayout
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
+
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8994
+
 # Media
 PRODUCT_PACKAGES += \
-    libstagefrighthw \
     libc2dcolorconvert \
     libdivxdrmdecrypt \
     libOmxAacEnc \
@@ -160,115 +142,106 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
-PRODUCT_BOOT_JARS += \
-    libstagefrighthw
+# Memory
+$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
 
-# Lights
-PRODUCT_PACKAGES += \
-    lights.msm8994
-
-# Audio
-PRODUCT_PACKAGES += \
-    audio.primary.msm8994 \
-    audio_policy.msm8994 \
-    audio.a2dp.default \
-    audio.usb.default \
-    audio.r_submix.default
-
-PRODUCT_PACKAGES += \
-    libaudio-resampler \
-    libqcompostprocbundle \
-    libqcomvisualizer \
-    libqcomvoiceprocessingdescriptors \
-    libqcomvoiceprocessing \
-    tinymix
-
-# OpenSource Audio helpers
-PRODUCT_PACKAGES += \
-    libtinycompress \
-    libtinyxml \
-    libtinyalsa
-
+# NFC
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/listen_platform_info.xml:system/etc/listen_platform_info.xml \
-    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
-    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/audio/media_profiles.xml:system/etc/media_profiles.xml \
-    $(LOCAL_PATH)/audio/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/audio/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    $(LOCAL_PATH)/audio/audio_ext_spkr.conf:system/vendor/etc/audio_ext_spkr.conf \
-    $(LOCAL_PATH)/audio/audio_platform_info_i2s.xml:system/etc/audio_platform_info_i2s.xml \
-    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml
-
-# CMActions
-PRODUCT_PACKAGES += \
-    CMActions
-
-# Wifi Firmware
-PRODUCT_COPY_FILES += \
-    kernel/motorola/msm8992/drivers/staging/qcacld-2.0/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld/WCNSS_cfg.dat \
-    kernel/motorola/msm8992/drivers/staging/qcacld-2.0/firmware_bin/WCNSS_qcom_cfg.usb.ini:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_cfg.usb.ini \
-    kernel/motorola/msm8992/drivers/staging/qcacld-2.0/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini
+    $(LOCAL_PATH)/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
+    $(LOCAL_PATH)/nfc/libnfc-brcm-20795a20.conf:system/etc/libnfc-brcm-20795a20.conf
 
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
-    hostapd_default.conf \
-    hostapd.deny \
-    hostapd.accept \
-    hostapd \
-    libwpa_client \
-    wpa_supplicant \
-    wpa_supplicant.conf \
-    wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf
+    com.android.nfc_extras \
+    nfc_nci.bcm2079x.default \
+    NfcNci \
+    Tag
 
-PRODUCT_PACKAGES += \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    quipc.conf \
-    sap.conf
-
+# Perf
 PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
+    $(LOCAL_PATH)/configs/msm_irqbalance.conf:system/etc/msm_irqbalance.conf
 
-# These are the hardware-specific features
+# Permissions
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:system/etc/permissions/android.hardware.vulkan.level.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.version-1_0_3.xml:system/etc/permissions/android.hardware.vulkan.version.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml \
-    frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
-    frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml
+    frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
+    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
+    frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
-# setup dalvik vm configs.
-$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
+# Power
+PRODUCT_PACKAGES += \
+    power.msm8994
 
-# setup base hwui configs
-$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
+# Radio
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/dsi_config.xml:system/etc/data/dsi_config.xml \
+    $(LOCAL_PATH)/configs/qcril.db:system/etc/motorola/qcril.db \
+    $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml \
+    $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml \
+    $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
 
-$(call inherit-product-if-exists, hardware/qcom/msm8994/msm8994.mk)
-$(call inherit-product-if-exists, vendor/qcom/gpu/msm8994/msm8994-gpu-vendor.mk)
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
+    libqsap_sdk \
+    ebtables \
+    ethertypes \
+    libnl_2 \
+    libbson \
+    librmnetctl \
+    libxml2
+
+# Sensors
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf \
+    $(LOCAL_PATH)/configs/sensorhub-blacklist.txt:system/etc/firmware/sensorhub-blacklist.txt
+
+# Thermal
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/thermanager.xml:system/etc/thermanager.xml
+
+PRODUCT_PACKAGES += \
+    thermanager
+
+# Wifi
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/hostapd.accept:system/etc/hostapd/hostapd.accept \
+    $(LOCAL_PATH)/wifi/hostapd.conf:system/etc/hostapd/hostapd_default.conf \
+    $(LOCAL_PATH)/wifi/hostapd.deny:system/etc/hostapd/hostapd.deny \
+    $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld/WCNSS_cfg.dat \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini
+
+PRODUCT_PACKAGES += \
+    hostapd \
+    libwpa_client \
+    wpa_supplicant \
+    wpa_supplicant.conf
+
+ifneq ($(TARGET_BUILD_VARIANT),user,userdebug,eng)
+  ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=0
+  ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0
+endif

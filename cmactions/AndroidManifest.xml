@@ -17,8 +17,7 @@
     <application
         android:allowBackup="true"
         android:label="CMActions"
-        android:persistent="true"
-        android:theme="@android:style/Theme.Material.Settings" >
+        android:persistent="true" >
 
         <receiver android:name="com.cyanogenmod.settings.device.BootCompletedReceiver">
             <intent-filter>
@@ -34,18 +33,30 @@
         </service>
 
         <activity
-            android:name=".TouchscreenGestureSettings"
-            android:label="@string/screen_gestures_panel_title">
+                  android:excludeFromRecents="true"
+                  android:name="CMActions"
+                  android:label="CMActions"
+                  android:launchMode="singleInstance"
+                  android:screenOrientation="portrait"
+                  android:windowAnimationStyle="@null">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".TouchscreenGesturePreferenceActivity"
+            android:label="@string/screen_gestures_panel_title"
+            android:theme="@style/CMActions" >
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
-                <catetgory android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
-                android:name="com.android.settings.icon"
-                android:resource="@drawable/ic_settings_additional_buttons" />
-            <meta-data
                 android:name="com.android.settings.category"
-                android:value="com.android.settings.category.device"/>
+                android:value="com.android.settings.category.device" />
+            <meta-data
+                android:name="com.android.settings.icon"
+                android:resource="@drawable/ic_settings_gestures" />
         </activity>
 
     </application>

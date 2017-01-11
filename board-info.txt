@@ -1,2 +1,0 @@
-board=kinzie
-require version-bootloader=0xA01C
