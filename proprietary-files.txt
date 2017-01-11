@@ -444,8 +444,8 @@ vendor/lib64/libxtwifi_zpp_adaptor.so
 # Adreno GPU
 etc/firmware/leia_pfp_470.fw
 etc/firmware/leia_pm4_470.fw
-vendor/firmware/a420_pfp.fw
-vendor/firmware/a420_pm4.fw
+etc/firmware/a420_pfp.fw
+etc/firmware/a420_pm4.fw
 vendor/lib/libOpenCL.so
 vendor/lib64/libOpenCL.so
 
